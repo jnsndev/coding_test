@@ -1,55 +1,45 @@
 import java.util.*;
 
 /**
- * 수열 추측하기
+ * 미로탐색 (DFS)
  */
 public class Main {
-    static int n, f, sum;
-    static int[] b, p, chk;  // b: 이항계수, p: 순열, chk: p배열 value 방문여부체크
-    static int[][] dy = new int[35][35];    // memoization
-    static boolean flag = false;
-    
-    public int combination(int n, int r) {
-        if (dy[n][r] > 0) return dy[n][r];
-        if (r == 0 || n == r) return 1;
-        if (r == 1) return n;
-        return dy[n][r] = combination(n-1, r-1) + combination(n-1, r);      
-    }
-    
-    public void DFS(int L, int sum) {
-        if (flag) return;
-        if (sum > f) return;
-        if (L == n) {
-            if (sum == f) {
-                flag = true;
-                for (int x : p) System.out.print(x + " ");
-            }
-        } else {
-            for (int i=1; i<=n; i++) {  // i: p배열 value
-                if (chk[i] == 0) {
-                    chk[i] = 1;
-                    p[L] = i;
-                    DFS(L+1, sum+(b[L]*p[L]));
-                    chk[i] = 0;
+    static int[][] miro = new int[8][8];
+    // index 0: 좌 1: 상 2: 우 2: 하
+    static int[] dx = {-1, 0, 1, 0};
+    static int[] dy = {0, -1, 0, 1};
+    static int answer = 0;
+
+    public void DFS(int x, int y) {
+        if (x == 7 && y == 7) answer++;
+        else {
+            // 현재좌표의 상하좌우 4방향 검사
+            for (int i=0; i<4; i++) {
+                int nx = x + dx[i];
+                int ny = y + dy[i];
+
+                if (nx >=1 && nx <=7 && ny >= 1 && ny <=7 && miro[nx][ny] == 0) {
+                    miro[nx][ny] = 1;
+                    DFS(nx, ny);
+                    miro[nx][ny] = 0;
                 }
-            }       
+            }
         }
     }
     public static void main(String[] args) {
         Main T = new Main();
         Scanner kb = new Scanner(System.in);
-        n = kb.nextInt();
-        f = kb.nextInt();
-        kb.close();
-        b = new int[n];
-        p = new int[n];
-        // chk의 length가 n+1인 이유: chk의 index가 p배열의 value (p배열 value 방문여부체크)
-        chk = new int[n+1];
 
-        for (int i=0; i<n; i++) {
-            b[i] = T.combination(n-1, i);
+        for (int i=1; i<=7; i++) {
+            for (int j=1; j<=7; j++) {
+                miro[i][j] = kb.nextInt();
+            }
         }
+        kb.close();
+        miro[1][1] = 1;
 
-        T.DFS(0, 0);
+        // 출발점 좌표 (x: 1, y: 1)
+        T.DFS(1, 1);
+        System.out.println(answer);
     }
 }
