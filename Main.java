@@ -1,7 +1,7 @@
 import java.util.*;
  
 /**
- * 토마토가 다 익는 최소일수 (BFS)
+ * 섬나라 아일랜드 (BFS)
  */
 class Point {
     int x, y;
@@ -12,64 +12,54 @@ class Point {
 }
  
 public class Main {
-    static int m, n;
-    static int[][] tomatoBox, days;
-    static int[] dx = {-1, 0, 1, 0};
-    static int[] dy = {0, -1, 0, 1};
-    static Queue<Point> Q = new LinkedList<>();
- 
+    static int n, answer;
+    static int[][] island;
+    static int[] dx = {0,   1, 1, 1, 0, -1, -1, -1};
+    static int[] dy = {-1, -1, 0, 1, 1,  1,  0, -1};
+
     public void BFS() {
- 
-        while (! Q.isEmpty()) {
-            Point cp = Q.poll();
-            
-            for (int i=0; i<4; i++) {
-                // 다음 좌표 구하기
-                int nx = cp.x + dx[i];
-                int ny = cp.y + dy[i];
- 
-                if (nx >= 0 && nx < n && ny >= 0 && ny < m && tomatoBox[nx][ny] == 0) {
-                    tomatoBox[nx][ny] = 1;
-                    Q.offer(new Point(nx, ny));
-                    days[nx][ny] = days[cp.x][cp.y] + 1;    // 토마토 익는 일수 구하기
+        Queue<Point> Q = new LinkedList<>();
+
+        for (int i=0; i<n; i++) {
+            for (int j=0; j<n; j++) {
+                // island의 원소가 섬인지 바다인지 하나하나 검사
+                if (island[i][j] == 1) {
+                    Q.offer(new Point(i, j));
+
+                    while (!Q.isEmpty()) {
+                        Point cur = Q.poll();
+
+                        // 현재 좌표를 기준으로 상하좌우, 대각선이 섬인지 검사
+                        for (int z=0; z<8; z++) {
+                            int nx = cur.x + dx[z];
+                            int ny = cur.y + dy[z];
+
+                            if (nx >= 0 && nx < n && ny >= 0 && ny < n && island[nx][ny] == 1) {
+                                island[nx][ny] = 0;
+                                Q.offer(new Point(nx, ny));
+                            }
+                        }
+                    }
+                    // Queue가 비었다는 것은 더 이어질 섬이 없다는 뜻이므로 섬의 개수 카운팅
+                    answer++;
                 }
             }
-        }        
+        }
     }
  
     public static void main(String[] args) {
         Main T = new Main();
         Scanner kb = new Scanner(System.in);
-        m = kb.nextInt();   // 가로
-        n = kb.nextInt();   // 세로
-        days = new int[n][m];
-        tomatoBox = new int[n][m];
+        n = kb.nextInt();
+        island = new int[n][n];
         for (int i=0; i<n; i++) {
-            for (int j=0; j<m; j++) {
-                tomatoBox[i][j] = kb.nextInt();
-                // 익은 토마토(=1)는 큐에 미리 offer
-                if (tomatoBox[i][j] == 1) Q.offer(new Point(i, j));
+            for (int j=0; j<n; j++) {
+                island[i][j] = kb.nextInt();
             }
         }
         kb.close();
+
         T.BFS();
-        boolean flag = true;    // 토마토상자에 안 익은 토마토가 있을 경우를 위해 존재
-        int answer = Integer.MIN_VALUE;
-
-        for (int i=0; i<n; i++) {
-            for (int j=0; j<m; j++) {
-                if (tomatoBox[i][j] == 0) flag = false;
-            }
-        }
-
-        if (flag) {
-            for (int i=0; i<n; i++) {
-                for (int j=0; j<m; j++) {
-                    answer = Math.max(answer, days[i][j]);
-                }
-            }
-            System.out.println(answer);
-        }
-        else System.out.println(-1);
+        System.out.println(answer);
     }
 }
