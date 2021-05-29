@@ -16,31 +16,33 @@ public class Main {
     static int[][] island;
     static int[] dx = {0,   1, 1, 1, 0, -1, -1, -1};
     static int[] dy = {-1, -1, 0, 1, 1,  1,  0, -1};
+    static Queue<Point> Q = new LinkedList<>();
 
-    public void BFS() {
-        Queue<Point> Q = new LinkedList<>();
+    public void BFS(int x, int y) {
+        Q.offer(new Point(x, y));
 
+        while (!Q.isEmpty()) {
+            Point cur = Q.poll();
+
+            // 현재 좌표를 기준으로 상하좌우, 대각선이 섬인지 검사
+            for (int z=0; z<8; z++) {
+                int nx = cur.x + dx[z];
+                int ny = cur.y + dy[z];
+
+                if (nx >= 0 && nx < n && ny >= 0 && ny < n && island[nx][ny] == 1) {
+                    island[nx][ny] = 0;
+                    Q.offer(new Point(nx, ny));
+                }
+            }
+        }
+    }
+    
+    public void solution() {
         for (int i=0; i<n; i++) {
             for (int j=0; j<n; j++) {
-                // island의 원소가 섬인지 바다인지 하나하나 검사
                 if (island[i][j] == 1) {
-                    Q.offer(new Point(i, j));
-
-                    while (!Q.isEmpty()) {
-                        Point cur = Q.poll();
-
-                        // 현재 좌표를 기준으로 상하좌우, 대각선이 섬인지 검사
-                        for (int z=0; z<8; z++) {
-                            int nx = cur.x + dx[z];
-                            int ny = cur.y + dy[z];
-
-                            if (nx >= 0 && nx < n && ny >= 0 && ny < n && island[nx][ny] == 1) {
-                                island[nx][ny] = 0;
-                                Q.offer(new Point(nx, ny));
-                            }
-                        }
-                    }
-                    // Queue가 비었다는 것은 더 이어질 섬이 없다는 뜻이므로 섬의 개수 카운팅
+                    island[i][j] = 0;
+                    BFS(i, j);
                     answer++;
                 }
             }
@@ -59,7 +61,7 @@ public class Main {
         }
         kb.close();
 
-        T.BFS();
+        T.solution();
         System.out.println(answer);
     }
 }
