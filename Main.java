@@ -1,7 +1,7 @@
 import java.util.*;
  
 /**
- * 섬나라 아일랜드 (DFS)
+ * 피자 배달 거리 (DFS)
  */
 class Point {
     int x, y;
@@ -12,32 +12,28 @@ class Point {
 }
  
 public class Main {
-    static int n, answer;
-    static int[][] island;
-    static int[] dx = {0,   1, 1, 1, 0, -1, -1, -1};
-    static int[] dy = {-1, -1, 0, 1, 1,  1,  0, -1};
+    static int n, m, answer = Integer.MAX_VALUE;
+    static int[] combi;
+    static int[][] cityArr;
+    static ArrayList<Point> hs, pz;
 
-    public void DFS(int x, int y) {
-        // 현재 좌표를 기준으로 상하좌우, 대각선이 섬인지 검사
-        for (int z=0; z<8; z++) {
-            int nx = x + dx[z];
-            int ny = y + dy[z];
-
-            if (nx >= 0 && nx < n && ny >= 0 && ny < n && island[nx][ny] == 1) {
-                island[nx][ny] = 0;
-                DFS(nx, ny);
-            }
-        }
-    }
-    
-    public void solution() {
-        for (int i=0; i<n; i++) {
-            for (int j=0; j<n; j++) {
-                if (island[i][j] == 1) {
-                    island[i][j] = 0;
-                    DFS(i, j);
-                    answer++;
+    public void DFS(int L, int s) {    // L: Level, s: start number
+        if (L == m) {   // 피자집 조합 4개 다 뽑힌 경우
+            int sum = 0;
+            
+            for (Point h : hs) {
+                int dis = Integer.MAX_VALUE;    // 해당 집의 피자배달거리
+                for (int idx : combi) {
+                    Point p = pz.get(idx);
+                    dis = Math.min(dis, Math.abs(h.x-p.x) + Math.abs(h.y-p.y));
                 }
+                sum += dis;
+            }
+            answer = Math.min(answer, sum);
+        } else {
+            for (int i=s; i<pz.size(); i++) {   // 피자집 조합 구하기
+                combi[L] = i;
+                DFS(L+1, i+1);
             }
         }
     }
@@ -46,15 +42,21 @@ public class Main {
         Main T = new Main();
         Scanner kb = new Scanner(System.in);
         n = kb.nextInt();
-        island = new int[n][n];
+        m = kb.nextInt();
+        combi = new int[m];
+        cityArr = new int[n][n];
+        hs = new ArrayList<>();
+        pz = new ArrayList<>();
+
         for (int i=0; i<n; i++) {
             for (int j=0; j<n; j++) {
-                island[i][j] = kb.nextInt();
+                cityArr[i][j] = kb.nextInt();
+                if (cityArr[i][j] == 1) hs.add(new Point(i, j));
+                else if (cityArr[i][j] == 2) pz.add(new Point(i, j));
             }
         }
         kb.close();
-
-        T.solution();
+        T.DFS(0, 0);
         System.out.println(answer);
     }
 }
