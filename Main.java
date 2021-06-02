@@ -1,32 +1,30 @@
 import java.util.*;
  
 /**
- * 문장 속 가장 긴 단어 찾기 (indexOf, subString 사용)
+ * 단어 뒤집기 (StringBuilder의 reverse 사용)
  */ 
 public class Main {
-    public String solution(String str) {
-        String answer = "";
-        int idx, cnt = Integer.MIN_VALUE;
+    public ArrayList<String> solution(String[] words) {
+        ArrayList<String> answer = new ArrayList<>();
 
-        while((idx = str.indexOf(" ")) != -1) {
-            String tmp = str.substring(0, idx);
-            int len = tmp.length();
-
-            if (cnt < len) {
-                cnt = idx;
-                answer = tmp;
-            }
-            str = str.substring(idx+1);
+        for (String str : words) {
+            String sb = new StringBuilder(str).reverse().toString();
+            answer.add(sb);
         }
-        if (cnt < str.length()) answer = str;
 
         return answer;
     }
     public static void main(String[] args) {
         Main T = new Main();
         Scanner kb = new Scanner(System.in);
-        String str = kb.nextLine();
+        int n = kb.nextInt();
+        String[] words = new String[n];
+
+        for (int i=0; i<n; i++) {
+            words[i] = kb.next();
+        }
+
         kb.close();
-        System.out.println(T.solution(str));
+        for (String x : T.solution(words)) System.out.println(x);
     }
 }
