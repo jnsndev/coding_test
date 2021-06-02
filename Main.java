@@ -1,7 +1,7 @@
 import java.util.*;
  
 /**
- * 숫자만 추출 (아스키코드)
+ * 숫자만 추출 (Character.isDigit)
  */ 
 public class Main {
     public int solution(String str) {
@@ -9,7 +9,11 @@ public class Main {
         char[] ch = str.toCharArray();
         
         for (char x : ch) {
-            if (x >= 48 && x <= 57) answer = answer*10 + (x-48);
+            // 방법1
+            if (Character.isDigit(x)) answer = answer*10 + Character.getNumericValue(x);
+
+            // 방법2
+            // if (Character.isDigit(x)) answer += x;
         }
 
         return answer;
