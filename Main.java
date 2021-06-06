@@ -1,21 +1,17 @@
 import java.util.*;
  
 /**
- * 문자열 압축
+ * 암호해석
  */ 
 public class Main {
-    public String solution(String str) {
+    public String solution(int cnt, String str) {
         String answer = "";
-        str = str + " ";
-        int cnt = 1;
 
-        for (int i=0; i<str.length()-1; i++) {
-            if (str.charAt(i) == str.charAt(i+1)) cnt++;
-            else {
-                answer += str.charAt(i);
-                if (cnt > 1) answer += String.valueOf(cnt);
-                cnt = 1;
-            }
+        for (int i=0; i<cnt; i++) {
+            String tmp = str.substring(0, 7).replace('#', '1').replace('*', '0');
+            int binary = Integer.parseInt(tmp, 2);  // 2진수 
+            answer += (char) binary;
+            str = str.substring(7);
         }
 
         return answer;
@@ -23,8 +19,9 @@ public class Main {
     public static void main(String[] args) {
         Main T = new Main();
         Scanner kb = new Scanner(System.in);
+        int cnt = kb.nextInt();
         String str = kb.next();
         kb.close();
-        System.out.println(T.solution(str));
+        System.out.println(T.solution(cnt, str));
     }
 }
