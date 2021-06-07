@@ -1,27 +1,21 @@
 import java.util.*;
  
 /**
- * 암호해석
+ * 재귀함수
  */ 
 public class Main {
-    public String solution(int cnt, String str) {
-        String answer = "";
-
-        for (int i=0; i<cnt; i++) {
-            String tmp = str.substring(0, 7).replace('#', '1').replace('*', '0');
-            int binary = Integer.parseInt(tmp, 2);  // 2진수 
-            answer += (char) binary;
-            str = str.substring(7);
+    public void DFS(int n) {
+        if (n == 0) return;
+        else {
+            DFS(n-1);
+            System.out.print(n + " ");
         }
-
-        return answer;
     }
     public static void main(String[] args) {
         Main T = new Main();
         Scanner kb = new Scanner(System.in);
-        int cnt = kb.nextInt();
-        String str = kb.next();
+        int n = kb.nextInt();
         kb.close();
-        System.out.println(T.solution(cnt, str));
+        T.DFS(n);
     }
 }
