@@ -1,21 +1,20 @@
 import java.util.*;
  
 /**
- * 재귀함수를 이용한 이진수 출력
+ * 팩토리얼
  */ 
 public class Main {
-    public void DFS(int n) {
-        if (n == 0) return;
-        else {
-            DFS(n / 2);
-            System.out.print(n % 2);
-        }
+    static int answer = 1;
+
+    public int DFS(int n) {
+        if (n == 1) return 1;
+        else return n * DFS(n-1);
     }
     public static void main(String[] args) {
         Main T = new Main();
         Scanner kb = new Scanner(System.in);
         int n = kb.nextInt();
         kb.close();
-        T.DFS(n);
+        System.out.println(T.DFS(n));
     }
 }
