@@ -1,35 +1,43 @@
 import java.util.*;
  
 /**
- * 부분집합 구하기
+ * 이진트리 순회 (넓이우선탐색 : 레벨탐색)
  */ 
-public class Main {
-    static int n;
-    static int[] arr;
+class Node {
+    int data;
+    Node lt, rt;
+    
+    // 생성자
+    public Node(int val) {
+        data = val;
+        lt = rt = null;
+    }
+}
 
-    public void DFS(int L) {
-        if (L == n+1) {
-            String tmp = "";
-            for (int i=1; i<=n; i++) {
-                if (arr[i] == 1) tmp += i + " ";
-            }
-            // 공집합을 출력하지 않기 위한 조건문
-            if (tmp.length() > 0) System.out.println(tmp);
-        } else {
-            // L을 부분집합 원소로 사용
-            arr[L] = 1;
-            DFS(L+1);
-            // L을 부분집합 원소로 사용하지않음
-            arr[L] = 0;
-            DFS(L+1);
-        }
+public class Main {
+    Node root;
+
+    public void BFS(Node root) {
+       Queue<Node> q = new LinkedList<>();
+       q.offer(root);
+
+       while (! q.isEmpty()) {
+           Node cur = q.poll();
+           System.out.print(cur.data + " ");
+           if (cur.lt != null) q.offer(cur.lt);
+           if (cur.rt != null) q.offer(cur.rt);
+       }
     }
     public static void main(String[] args) {
-        Main T = new Main();
-        Scanner kb = new Scanner(System.in);
-        n = kb.nextInt();
-        arr = new int[n+1];
-        kb.close();
-        T.DFS(1);
+        Main tree = new Main();
+        tree.root = new Node(1);
+        tree.root.lt = new Node(2);
+        tree.root.rt = new Node(3);
+        tree.root.lt.lt = new Node(4);
+        tree.root.lt.rt = new Node(5);
+        tree.root.rt.lt = new Node(6);
+        tree.root.rt.rt = new Node(7);
+
+        tree.BFS(tree.root);
     }
 }
