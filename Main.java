@@ -1,7 +1,7 @@
 import java.util.*;
  
 /**
- * 이진트리 순회 (넓이우선탐색 : 레벨탐색)
+ * 이진트리 순회 (넓이우선탐색 : 레벨탐색) - 레벨별 출력
  */ 
 class Node {
     int data;
@@ -20,12 +20,20 @@ public class Main {
     public void BFS(Node root) {
        Queue<Node> q = new LinkedList<>();
        q.offer(root);
+       int level = 0;
 
        while (! q.isEmpty()) {
-           Node cur = q.poll();
-           System.out.print(cur.data + " ");
-           if (cur.lt != null) q.offer(cur.lt);
-           if (cur.rt != null) q.offer(cur.rt);
+           System.out.print(level + " : ");
+           int len = q.size();
+           
+           for (int i=0; i<len; i++) {
+               Node cur = q.poll();
+               System.out.print(cur.data + " ");
+               if (cur.lt != null) q.offer(cur.lt);
+               if (cur.rt != null) q.offer(cur.rt);
+           }
+           level++;
+           System.out.println();
        }
     }
     public static void main(String[] args) {
