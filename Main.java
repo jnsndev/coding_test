@@ -1,51 +1,44 @@
 import java.util.*;
  
 /**
- * 이진트리 순회 (넓이우선탐색 : 레벨탐색) - 레벨별 출력
+ * 송아지 찾기
  */ 
-class Node {
-    int data;
-    Node lt, rt;
-    
-    // 생성자
-    public Node(int val) {
-        data = val;
-        lt = rt = null;
-    }
-}
-
 public class Main {
-    Node root;
+    int[] dis = {-1, 1, 5};     // 한번에 이동할 수 있는 거리
+    int[] ch;   // index = 좌표점 (방문 여부 체크)
+    Queue<Integer> q = new LinkedList<>();
 
-    public void BFS(Node root) {
-       Queue<Node> q = new LinkedList<>();
-       q.offer(root);
-       int level = 0;
+    public int BFS(int sn, int en) {    // start number, end number
+        ch = new int[10001];
+        int level = 0;
+        q.offer(sn);
 
-       while (! q.isEmpty()) {
-           System.out.print(level + " : ");
-           int len = q.size();
-           
-           for (int i=0; i<len; i++) {
-               Node cur = q.poll();
-               System.out.print(cur.data + " ");
-               if (cur.lt != null) q.offer(cur.lt);
-               if (cur.rt != null) q.offer(cur.rt);
-           }
-           level++;
-           System.out.println();
-       }
+        while (! q.isEmpty()) {
+            int len = q.size();
+            
+            for (int i=0; i<len; i++) {
+                int x = q.poll();
+                for (int j=0; j<3; j++) {
+                    int nx = x + dis[j];    // 다음 좌표
+                    
+                    if (nx == en) return level+1;
+                    if (nx >= 1 && nx <= 10000 && ch[nx] == 0) {    // 방문하지 않은 좌표만 q에 offer
+                        ch[nx] = 1;
+                        q.offer(nx);
+                    }
+                }
+            }
+            level++;
+        }
+        
+        return 0;
     }
     public static void main(String[] args) {
-        Main tree = new Main();
-        tree.root = new Node(1);
-        tree.root.lt = new Node(2);
-        tree.root.rt = new Node(3);
-        tree.root.lt.lt = new Node(4);
-        tree.root.lt.rt = new Node(5);
-        tree.root.rt.lt = new Node(6);
-        tree.root.rt.rt = new Node(7);
-
-        tree.BFS(tree.root);
+        Main T = new Main();
+        Scanner kb = new Scanner(System.in);
+        int sn = kb.nextInt();
+        int en = kb.nextInt();
+        kb.close();
+        System.out.println(T.BFS(sn, en));
     }
 }
