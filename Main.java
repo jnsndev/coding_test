@@ -16,24 +16,9 @@ class Node {
 public class Main {
     Node root;
 
-    public int BFS(Node root) {
-        int level = 0;
-        Queue<Node> q = new LinkedList<>();
-        q.offer(root);
-        
-        while (! q.isEmpty()) {
-            int len = q.size();
-            
-            for (int i=0; i<len; i++) {
-                Node cur = q.poll();
-                if (cur.lt == null && cur.rt == null) return level;
-                if (cur.lt != null) q.offer(cur.lt);
-                if (cur.rt != null) q.offer(cur.rt);
-            }
-            level++;
-        }
-
-        return 0;
+    public int DFS(int level, Node root) {
+        if (root.lt == null && root.rt == null) return level;
+        else return Math.min(DFS(level+1, root.lt), DFS(level+1, root.rt));
     }
     public static void main(String[] args) {
         Main tree = new Main();
@@ -42,6 +27,6 @@ public class Main {
         tree.root.rt = new Node(3);
         tree.root.lt.lt = new Node(4);
         tree.root.lt.rt = new Node(5);
-        System.out.println(tree.BFS(tree.root));
+        System.out.println(tree.DFS(0, tree.root));
     }
 }
