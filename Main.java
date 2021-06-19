@@ -1,21 +1,26 @@
 import java.util.*;
  
 /**
- * 경로 탐색 (인접리스트)
+ * 그래프 최단거리
  */ 
 public class Main {
-    static int n, m, answer;
-    static int[] ch;
-    static List<ArrayList<Integer>> list;
+    static int n, m;
+    static int[] ch, answer;
+    static List<ArrayList<Integer>> graph;
 
-    public void DFS(int v) {
-        if (v == n) answer++;
-        else {
-            for (int nv : list.get(v)) {
-                if (ch[nv] == 0) {
+    public void BFS(int v) {
+        ch[v] = 1;      // ch[1] = 1
+        Queue<Integer> q = new LinkedList<>();
+        q.offer(v);
+
+        while (! q.isEmpty()) {
+            int cv = q.poll();
+
+            for (int nv : graph.get(cv)) {
+                if (ch[nv] == 0) {  // 방문 여부 체크
                     ch[nv] = 1;
-                    DFS(nv);
-                    ch[nv] = 0;
+                    q.offer(nv);
+                    answer[nv] = answer[cv] + 1;
                 }
             }
         }
@@ -26,22 +31,23 @@ public class Main {
         Scanner kb = new Scanner(System.in);
         n = kb.nextInt();
         m = kb.nextInt();
-        list = new ArrayList<ArrayList<Integer>>();
+        graph = new ArrayList<ArrayList<Integer>>();
 
         for (int i=0; i<=n; i++) {
-            list.add(new ArrayList<Integer>());
+            graph.add(new ArrayList<>());
         }
 
         for (int i=0; i<m; i++) {
             int a = kb.nextInt();
             int b = kb.nextInt();
-            list.get(a).add(b);
+            graph.get(a).add(b);
         }
         kb.close();
 
+        answer = new int[n+1];
         ch = new int[n+1];
-        ch[1] = 1;
-        T.DFS(1);
-        System.out.println(answer);
+
+        T.BFS(1);
+        for (int i=2; i<answer.length; i++) System.out.println(i + " : " + answer[i]);
     }
 }
