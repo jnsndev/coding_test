@@ -1,28 +1,25 @@
 import java.util.*;
  
 /**
- * 그래프 최단거리
+ * 합이 같은 부분집합 (아마존 인터뷰)
  */ 
 public class Main {
-    static int n, m;
-    static int[] ch, answer;
-    static List<ArrayList<Integer>> graph;
+    static String answer = "NO";
+    static int n, total;
+    static int[] arr;
+    static boolean flag = false;
 
-    public void BFS(int v) {
-        ch[v] = 1;      // ch[1] = 1
-        Queue<Integer> q = new LinkedList<>();
-        q.offer(v);
-
-        while (! q.isEmpty()) {
-            int cv = q.poll();
-
-            for (int nv : graph.get(cv)) {
-                if (ch[nv] == 0) {  // 방문 여부 체크
-                    ch[nv] = 1;
-                    q.offer(nv);
-                    answer[nv] = answer[cv] + 1;
-                }
+    public void DFS(int level, int sum) {
+        if (flag) return;
+        if (sum > total/2) return;
+        if (level == n) {
+            if ((total-sum) == sum) {
+                answer = "YES";
+                flag = true;
             }
+        } else {
+            DFS(level+1, arr[level]+sum);
+            DFS(level+1, sum);
         }
     }
     
@@ -30,24 +27,14 @@ public class Main {
         Main T = new Main();
         Scanner kb = new Scanner(System.in);
         n = kb.nextInt();
-        m = kb.nextInt();
-        graph = new ArrayList<ArrayList<Integer>>();
+        arr = new int[n];
 
-        for (int i=0; i<=n; i++) {
-            graph.add(new ArrayList<>());
-        }
-
-        for (int i=0; i<m; i++) {
-            int a = kb.nextInt();
-            int b = kb.nextInt();
-            graph.get(a).add(b);
+        for (int i=0; i<n; i++) {
+            arr[i] = kb.nextInt();
+            total += arr[i];
         }
         kb.close();
-
-        answer = new int[n+1];
-        ch = new int[n+1];
-
-        T.BFS(1);
-        for (int i=2; i<answer.length; i++) System.out.println(i + " : " + answer[i]);
+        T.DFS(0, 0);
+        System.out.println(answer);
     }
 }
