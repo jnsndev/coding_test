@@ -1,34 +1,36 @@
 import java.util.*;
  
 /**
- * 바둑이 승차
+ * 최대 점수 구하기
  */ 
 public class Main {
-    static int c, n, answer = Integer.MIN_VALUE;
-    static int[] arr;
-
-    public void DFS(int level, int sum) {
-        if (sum > c) return;    // ckg을 넘어가면 밑에 로직 실행할 필요x
-        if (level == n) {       // 부분집합 완성
-            answer = Math.max(sum, answer);
-        } else {
-            DFS(level+1, sum+arr[level]);   // arr[level] 값을 부분집합에 포함
-            DFS(level+1, sum);              // arr[level] 값을 부분집합에 미포함
-        }
-    }
+    static int n, m, answer = Integer.MIN_VALUE;
+    static int[] a, b;  // a: 점수, b: 시간
     
+    public void DFS(int level, int point, int time) {
+        if (time > m) return;
+        if (level == n) {   // 부분집합 완성
+            answer = Math.max(answer, point);
+        } else {
+            DFS(level+1, point+a[level], time+b[level]);
+            DFS(level+1, point, time);
+        }
+    } 
+
     public static void main(String[] args) {
         Main T = new Main();
         Scanner kb = new Scanner(System.in);
-        c = kb.nextInt();
         n = kb.nextInt();
-        arr = new int[n];
+        m = kb.nextInt();
+        a = new int[n];
+        b = new int[n];
 
         for (int i=0; i<n; i++) {
-            arr[i] = kb.nextInt();
+            a[i] = kb.nextInt();
+            b[i] = kb.nextInt();
         }
         kb.close();
-        T.DFS(0, 0);
+        T.DFS(0, 0, 0);
         System.out.println(answer);
     }
 }
