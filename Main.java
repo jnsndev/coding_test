@@ -1,20 +1,20 @@
 import java.util.*;
  
 /**
- * 중복순열 구하기
+ * 동전교환
  */ 
 public class Main {
-    static int n, m;    // n: 구슬에 적힌 마지막 번호, m: 뽑는 횟수
-    static int[] arr;
-    
-    public void DFS(int level) {
-        if (level == m) {
-            for (int x : arr) System.out.print(x + " ");
-            System.out.println();
+    static int n, total, answer = Integer.MAX_VALUE;
+    static int[] coin;
+
+    public void DFS(int level, int price) {
+        if (price > total) return;
+        if (level >= answer) return;
+        if (price == total) {
+            answer = Math.min(answer, level);
         } else {
-            for (int i=1; i<=n; i++) {
-                arr[level] = i;
-                DFS(level+1);
+            for (int i=0; i<coin.length; i++) {
+                DFS(level+1, price+coin[i]);
             }
         }
     }
@@ -23,9 +23,13 @@ public class Main {
         Main T = new Main();
         Scanner kb = new Scanner(System.in);
         n = kb.nextInt();
-        m = kb.nextInt();
-        arr = new int[m];
+        coin = new int[n];
+        for (int i=n-1; i>=0; i--) {
+            coin[i] = kb.nextInt();
+        }
+        total = kb.nextInt();
         kb.close();
-        T.DFS(0);
+        T.DFS(0, 0);
+        System.out.println(answer);
     }
 }
