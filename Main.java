@@ -1,16 +1,20 @@
 import java.util.*;
  
 /**
- * 큰 수 출력하기
+ * 보이는 학생
  */ 
 public class Main {
-    public ArrayList<Integer> solution(int n, int[] arr) {
-        ArrayList<Integer> answer = new ArrayList<>();
-        answer.add(arr[0]);
-        for (int i=1; i<n; i++) {
-            if (arr[i] > arr[i-1]) answer.add(arr[i]);
-        }
+    public int solution(int n, int[] arr) {
+        int answer = 1;
+        int max = arr[0];
 
+        for (int i=1; i<n; i++) {
+            if (arr[i] > max) {
+                max = arr[i];
+                answer++;
+            }
+        }
+        
         return answer;
     }
 
@@ -18,12 +22,12 @@ public class Main {
         Main T = new Main();
         Scanner kb = new Scanner(System.in);
         int n = kb.nextInt();
-        int[] arr = new int[n];
-
+        int[] height = new int[n];
+        
         for (int i=0; i<n; i++) {
-            arr[i] = kb.nextInt();
+            height[i] = kb.nextInt();
         }
         kb.close();
-        for (int x : T.solution(n, arr)) System.out.print(x + " ");
+        System.out.println(T.solution(n, height));
     }
 }
