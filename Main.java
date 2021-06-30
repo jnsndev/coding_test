@@ -1,20 +1,19 @@
 import java.util.*;
  
 /**
- * 보이는 학생
+ * 가위바위보
  */ 
 public class Main {
-    public int solution(int n, int[] arr) {
-        int answer = 1;
-        int max = arr[0];
-
-        for (int i=1; i<n; i++) {
-            if (arr[i] > max) {
-                max = arr[i];
-                answer++;
-            }
+    public String solution(int n, int[] a, int[] b) {
+        String answer = "";
+        for (int i=0; i<n; i++) {
+            if (a[i] == b[i]) answer += "D";
+            else if (a[i] == 1 && b[i] == 3) answer += "A";
+            else if (a[i] == 2 && b[i] == 1) answer += "A";
+            else if (a[i] == 3 && b[i] == 2) answer += "A";
+            else answer += "B";
         }
-        
+
         return answer;
     }
 
@@ -22,12 +21,18 @@ public class Main {
         Main T = new Main();
         Scanner kb = new Scanner(System.in);
         int n = kb.nextInt();
-        int[] height = new int[n];
-        
+        int[] a = new int[n];
+        int[] b = new int[n];
+
         for (int i=0; i<n; i++) {
-            height[i] = kb.nextInt();
+            a[i] = kb.nextInt();
+        }
+
+        for (int i=0; i<n; i++) {
+            b[i] = kb.nextInt();
         }
         kb.close();
-        System.out.println(T.solution(n, height));
+
+        for (char x : T.solution(n, a, b).toCharArray()) System.out.println(x);;
     }
 }
