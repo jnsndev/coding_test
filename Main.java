@@ -1,28 +1,30 @@
 import java.util.*;
  
 /**
- * 소수 (에라토스테네스 체)
+ * 뒤집은 소수
  */ 
 public class Main {
-    public int solution(int n, int[] arr) {
-        int answer = 0;
+    public boolean isPrime(int num) {
+        if (num == 1) return false;
+        for (int i=2; i<num; i++) {
+            if (num % i == 0) return false;
+        }
+        return true;
+    }
 
-        // time limit exceeded
-        // for (int i=2; i<=n; i++) {
-        //     if (arr[i] == 0) {
-        //         answer++;
-        //         for (int j=2; j<=n; j++) {
-        //             if (j % i == 0) arr[j] = 1;
-        //         }
-        //     }
-        // }
+    public ArrayList<Integer> solution(int n, int[] arr) {
+        ArrayList<Integer> answer = new ArrayList<>();
 
-        for (int i=2; i<=n; i++) {
-            if (arr[i] == 0) {
-                answer++;
-                // i의 배수를 소거하는 방법
-                for (int j=i; j<=n; j=i+j) arr[j] = 1;
+        for (int x : arr) {
+            int tmp = x;
+            int reverse = 0;
+            // 뒤집은 수 만들기
+            while (tmp > 0) {
+                int num = tmp % 10;
+                reverse = reverse * 10 + num;
+                tmp /= 10;
             }
+            if (isPrime(reverse)) answer.add(reverse); 
         }
 
         return answer;
@@ -32,8 +34,10 @@ public class Main {
         Main T = new Main();
         Scanner kb = new Scanner(System.in);
         int n = kb.nextInt();
+        int[] arr = new int[n];
+
+        for (int i=0; i<n; i++) arr[i] = kb.nextInt();
         kb.close();
-        int[] arr = new int[n+1];
-        System.out.println(T.solution(n, arr));
+        for (int x : T.solution(n, arr)) System.out.print(x + " ");;
     }
 }
