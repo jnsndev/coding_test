@@ -1,30 +1,19 @@
 import java.util.*;
  
 /**
- * 뒤집은 소수
+ * 점수 계산
  */ 
 public class Main {
-    public boolean isPrime(int num) {
-        if (num == 1) return false;
-        for (int i=2; i<num; i++) {
-            if (num % i == 0) return false;
-        }
-        return true;
-    }
-
-    public ArrayList<Integer> solution(int n, int[] arr) {
-        ArrayList<Integer> answer = new ArrayList<>();
+    public int solution(int[] arr) {
+        int answer = 0, point = 0;
 
         for (int x : arr) {
-            int tmp = x;
-            int reverse = 0;
-            // 뒤집은 수 만들기
-            while (tmp > 0) {
-                int num = tmp % 10;
-                reverse = reverse * 10 + num;
-                tmp /= 10;
+            if (x == 1) {
+                point++;
+                answer += point;
+            } else {
+                point = 0;
             }
-            if (isPrime(reverse)) answer.add(reverse); 
         }
 
         return answer;
@@ -38,6 +27,6 @@ public class Main {
 
         for (int i=0; i<n; i++) arr[i] = kb.nextInt();
         kb.close();
-        for (int x : T.solution(n, arr)) System.out.print(x + " ");;
+        System.out.println(T.solution(arr));
     }
 }
