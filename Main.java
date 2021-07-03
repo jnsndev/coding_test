@@ -1,19 +1,18 @@
 import java.util.*;
  
 /**
- * 점수 계산
+ * 등수구하기
  */ 
 public class Main {
-    public int solution(int[] arr) {
-        int answer = 0, point = 0;
+    public int[] solution(int n, int[] arr) {
+        int[] answer = new int[n];
 
-        for (int x : arr) {
-            if (x == 1) {
-                point++;
-                answer += point;
-            } else {
-                point = 0;
+        for (int i=0; i<n; i++) {
+            int cnt = 1;
+            for (int j=0; j<n; j++) {
+                if (arr[i] < arr[j]) cnt++;
             }
+            answer[i] = cnt;
         }
 
         return answer;
@@ -27,6 +26,6 @@ public class Main {
 
         for (int i=0; i<n; i++) arr[i] = kb.nextInt();
         kb.close();
-        System.out.println(T.solution(arr));
+        for (int x : T.solution(n, arr)) System.out.print(x + " ");
     }
 }
