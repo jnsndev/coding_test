@@ -1,19 +1,31 @@
 import java.util.*;
  
 /**
- * 등수구하기
+ * 격자판 최대합
  */ 
 public class Main {
-    public int[] solution(int n, int[] arr) {
-        int[] answer = new int[n];
-
+    public int solution(int n, int[][] board) {
+        int answer = Integer.MIN_VALUE;
+        int sum1 = 0, sum2 = 0;
+        
         for (int i=0; i<n; i++) {
-            int cnt = 1;
+            sum1 = sum2 = 0;
             for (int j=0; j<n; j++) {
-                if (arr[i] < arr[j]) cnt++;
+                sum1 += board[i][j];
+                sum2 += board[j][i];
             }
-            answer[i] = cnt;
+            answer = Math.max(answer, sum1);
+            answer = Math.max(answer, sum2);
         }
+
+        sum1 = sum2 = 0;
+        
+        for (int i=0; i<n; i++) {
+            sum1 += board[i][i];
+            sum2 += board[i][n-1-i];
+        }
+        answer = Math.max(answer, sum1);
+        answer = Math.max(answer, sum2);
 
         return answer;
     }
@@ -22,10 +34,14 @@ public class Main {
         Main T = new Main();
         Scanner kb = new Scanner(System.in);
         int n = kb.nextInt();
-        int[] arr = new int[n];
+        int[][] board = new int[n][n];
 
-        for (int i=0; i<n; i++) arr[i] = kb.nextInt();
+        for (int i=0; i<n; i++) {
+            for (int j=0; j<n; j++) {
+                board[i][j] = kb.nextInt();
+            }
+        }
         kb.close();
-        for (int x : T.solution(n, arr)) System.out.print(x + " ");
+        System.out.println(T.solution(n, board));
     }
 }
