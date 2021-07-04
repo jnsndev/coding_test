@@ -1,31 +1,33 @@
 import java.util.*;
  
 /**
- * 격자판 최대합
+ * 봉우리 지역 개수
  */ 
 public class Main {
-    public int solution(int n, int[][] board) {
-        int answer = Integer.MIN_VALUE;
-        int sum1 = 0, sum2 = 0;
-        
-        for (int i=0; i<n; i++) {
-            sum1 = sum2 = 0;
-            for (int j=0; j<n; j++) {
-                sum1 += board[i][j];
-                sum2 += board[j][i];
-            }
-            answer = Math.max(answer, sum1);
-            answer = Math.max(answer, sum2);
-        }
+    int[] dx = {0, 1, 0, -1};
+    int[] dy = {-1, 0, 1, 0};
 
-        sum1 = sum2 = 0;
-        
+    public int solution(int n, int[][] board) {
+        int answer = 0;
+
         for (int i=0; i<n; i++) {
-            sum1 += board[i][i];
-            sum2 += board[i][n-1-i];
+            for (int j=0; j<n; j++) {
+                boolean flag = true;
+                int cur = board[i][j];
+
+                // 상하좌우 좌표값을 현재 좌표값과 비교
+                for (int k=0; k<4; k++) {
+                    int nx = i + dx[k];
+                    int ny = j + dy[k];
+
+                    if (nx >= 0 && nx < n && ny >= 0 && ny < n && board[nx][ny] >= cur) {
+                        flag = false;
+                        break;
+                    }
+                }
+                if (flag) answer++;
+            }
         }
-        answer = Math.max(answer, sum1);
-        answer = Math.max(answer, sum2);
 
         return answer;
     }
