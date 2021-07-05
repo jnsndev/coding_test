@@ -1,30 +1,29 @@
 import java.util.*;
  
 /**
- * 임시반장 정하기
+ * 멘토링
  */ 
 public class Main {
-    public int solution(int n, int[][] board) {
-        int answer = 0, max = Integer.MIN_VALUE;
+    public int solution(int n, int m, int[][] board) {
+        int answer = 0;
 
-        for (int i=1; i<=n; i++) {  // 비교 기준이 되는 i번 학생
-            // i번 학생의 반과 1번에서 n번 학생의 반을 비교해 한번이라도 같은 반이었던 학생 수 
-            int cnt = 0;
+        for (int i=1; i<=n; i++) {   // i번 학생 (멘토)
+            for (int j=1; j<=n; j++) {   // j번 학생 (멘티)
+                int cnt = 0;
 
-            for (int j=1; j<=n; j++) {  // 비교 대상이 되는 j번 학생
-                for (int k=1; k<=5; k++) {  // k학년
-                    if (board[i][k] == board[j][k]) {
-                        cnt++;
-                        // i번 학생과 j번 학생이 k학년에서 같은 반인 경우
-                        // 예를 들어, k+1학년 때 다시 같은 반이 될 경우 j번 학생이 더블체크 되므로 break문 필수 
-                        break;
+                // ex. (3번 멘토, 1번 멘티) 고정 후, 조건에 만족하는지 검사
+                // 멘토-멘티 관계 충족 조건: 각 테스트에서 3번 학생의 등수가 1번 학생의 등수보다 높으면 cnt++; 
+                // 멘토-멘티 관계 확정 조건: cnt 값이 m(테스트 수)과 같으면 모든 테스트에서 3번 학생의 등수가 1번 학생의 등수보다 높다는 증거이므로 멘토-멘티 관계 확정
+                for (int k=0; k<m; k++) {   // k번째 테스트
+                    int iGrade = 0, jGrade = 0;
+
+                    for (int s=0; s<n; s++) {   // s등수
+                        if (board[k][s] == i) iGrade = s;
+                        if (board[k][s] == j) jGrade = s;
                     }
+                    if (iGrade < jGrade) cnt++;
                 }
-            }
-            
-            if (cnt > max) {
-                max = cnt;
-                answer = i;
+                if (cnt == m) answer++;
             }
         }
 
@@ -34,15 +33,16 @@ public class Main {
     public static void main(String[] args) {
         Main T = new Main();
         Scanner kb = new Scanner(System.in);
-        int n = kb.nextInt();
-        int[][] board = new int[n+1][6];
+        int n = kb.nextInt();   // n명의 학생
+        int m = kb.nextInt();   // m번의 테스트
+        int[][] board = new int[m][n];
 
-        for (int i=1; i<=n; i++) {
-            for (int j=1; j<=5; j++) {
+        for (int i=0; i<m; i++) {
+            for (int j=0; j<n; j++) {
                 board[i][j] = kb.nextInt();
             }
         }
         kb.close();
-        System.out.println(T.solution(n, board));
+        System.out.println(T.solution(n, m, board));
     }
 }
