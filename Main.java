@@ -1,31 +1,26 @@
 import java.util.*;
  
 /**
- * 멘토링
+ * 두 배열 합치기
  */ 
 public class Main {
-    public int solution(int n, int m, int[][] board) {
-        int answer = 0;
+    public ArrayList<Integer> solution(int n, int m, int[] arr1, int[] arr2) {
+        ArrayList<Integer> answer = new ArrayList<>();
+        int p1 = 0, p2 = 0;
 
-        for (int i=1; i<=n; i++) {   // i번 학생 (멘토)
-            for (int j=1; j<=n; j++) {   // j번 학생 (멘티)
-                int cnt = 0;
-
-                // ex. (3번 멘토, 1번 멘티) 고정 후, 조건에 만족하는지 검사
-                // 멘토-멘티 관계 충족 조건: 각 테스트에서 3번 학생의 등수가 1번 학생의 등수보다 높으면 cnt++; 
-                // 멘토-멘티 관계 확정 조건: cnt 값이 m(테스트 수)과 같으면 모든 테스트에서 3번 학생의 등수가 1번 학생의 등수보다 높다는 증거이므로 멘토-멘티 관계 확정
-                for (int k=0; k<m; k++) {   // k번째 테스트
-                    int iGrade = 0, jGrade = 0;
-
-                    for (int s=0; s<n; s++) {   // s등수
-                        if (board[k][s] == i) iGrade = s;
-                        if (board[k][s] == j) jGrade = s;
-                    }
-                    if (iGrade < jGrade) cnt++;
-                }
-                if (cnt == m) answer++;
+        while (p1 < n && p2 < m) {
+            if (arr1[p1] < arr2[p2]) {
+                answer.add(arr1[p1]);
+                p1++;
+            } else {
+                answer.add(arr2[p2]);
+                p2++;
             }
         }
+
+        // 길이가 더 긴 배열의 남은 원소들을 출력
+        while (p1 < n) answer.add(arr1[p1++]);
+        while (p2 < m) answer.add(arr2[p2++]);
 
         return answer;
     }
@@ -33,16 +28,13 @@ public class Main {
     public static void main(String[] args) {
         Main T = new Main();
         Scanner kb = new Scanner(System.in);
-        int n = kb.nextInt();   // n명의 학생
-        int m = kb.nextInt();   // m번의 테스트
-        int[][] board = new int[m][n];
-
-        for (int i=0; i<m; i++) {
-            for (int j=0; j<n; j++) {
-                board[i][j] = kb.nextInt();
-            }
-        }
+        int n = kb.nextInt();
+        int[] arr1 = new int[n];
+        for (int i=0; i<n; i++) arr1[i] = kb.nextInt();
+        int m = kb.nextInt();
+        int[] arr2 = new int[m];
+        for (int j=0; j<m; j++) arr2[j] = kb.nextInt();
         kb.close();
-        System.out.println(T.solution(n, m, board));
+        for (int x : T.solution(n, m, arr1, arr2)) System.out.print(x + " ");
     }
 }
