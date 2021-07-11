@@ -1,19 +1,21 @@
 import java.util.*;
  
 /**
- * 최대 매출
+ * 연속 부분수열
  */ 
 public class Main {
-    public int solution(int n, int k, int[] arr) {
-        int answer, sum = 0;
+    public int solution(int n, int m, int[] arr) {
+        int answer = 0, sum = 0, lt = 0;
 
-        // 주어진 배열의 0 index부터 k-1까지 합산 
-        for (int i=0; i<k; i++) sum += arr[i];
-        answer = sum;
-
-        for (int i=k; i<n; i++) {
-            sum += (arr[i] - arr[i-k]);
-            answer = Math.max(answer, sum);   
+        // sum: lt ~ rt 구간의 연속 부분수열의 합
+        for (int rt=0; rt<n; rt++) {
+            sum += arr[rt];
+            if (sum == m) answer++;
+            while (sum >= m) {
+                sum -= arr[lt];
+                lt++;
+                if (sum == m) answer++;
+            }
         }
 
         return answer;
@@ -23,10 +25,10 @@ public class Main {
         Main T = new Main();
         Scanner kb = new Scanner(System.in);
         int n = kb.nextInt();
-        int k = kb.nextInt();
+        int m = kb.nextInt();
         int[] arr = new int[n];
         for (int i=0; i<n; i++) arr[i] = kb.nextInt();
         kb.close();
-        System.out.println(T.solution(n, k, arr));
+        System.out.println(T.solution(n, m, arr));
     }
 }
