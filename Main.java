@@ -1,20 +1,23 @@
 import java.util.*;
  
 /**
- * 연속 부분수열
+ * 연속된 자연수의 합
  */ 
 public class Main {
-    public int solution(int n, int m, int[] arr) {
+    public int solution(int n) {
         int answer = 0, sum = 0, lt = 0;
+        int m = n/2 + 1;    // 어떤 숫자까지 합할 것인지
+        int[] arr = new int[m];
 
-        // sum: lt ~ rt 구간의 연속 부분수열의 합
-        for (int rt=0; rt<n; rt++) {
+        for (int i=0; i<m; i++) arr[i] = i+1;   // 합할 숫자들을 배열에 저장
+
+        for (int rt=0; rt<m; rt++) {
             sum += arr[rt];
-            if (sum == m) answer++;
-            while (sum >= m) {
+            if (sum == n) answer++;
+            while (sum >= n) {
                 sum -= arr[lt];
                 lt++;
-                if (sum == m) answer++;
+                if (sum == n) answer++;
             }
         }
 
@@ -25,10 +28,7 @@ public class Main {
         Main T = new Main();
         Scanner kb = new Scanner(System.in);
         int n = kb.nextInt();
-        int m = kb.nextInt();
-        int[] arr = new int[n];
-        for (int i=0; i<n; i++) arr[i] = kb.nextInt();
         kb.close();
-        System.out.println(T.solution(n, m, arr));
+        System.out.println(T.solution(n));
     }
 }
