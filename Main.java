@@ -1,19 +1,26 @@
 import java.util.*;
  
 /**
- * 최대 길이 연속부분수열
+ * 학급 회장 선출
  */ 
 public class Main {
-    public int solution(int n, int k, int[] arr) {
-        int answer = 0, cnt = 0, lt = 0;
+    public char solution(int n, String str) {
+        char answer = ' ';
+        HashMap<Character, Integer> map = new HashMap<>();
         
-        for (int rt=0; rt<n; rt++) {
-            if (arr[rt] == 0) cnt++;    // 0을 1로 변경한 횟수 카운팅
-            while (cnt > k) {
-                if (arr[lt] == 0) cnt--;    // 0을 1로 변경할 수 있는 최대 횟수인 k를 넘어가면 감소
-                lt++;
+        for (char x : str.toCharArray()) {
+            // getOrDefault(x, 0): x key가 존재하면 그 값을 리턴하고 존재하지 않는다면 0을 리턴
+            // => 카운팅할 때, 중요
+            map.put(x, map.getOrDefault(x, 0) + 1);
+        }
+        
+        int max = Integer.MIN_VALUE;
+        for (char key : map.keySet()) {
+            // System.out.println(key + " " + map.get(key));
+            if (map.get(key) > max) {
+                max = map.get(key);
+                answer = key;
             }
-            answer = Math.max(answer, rt-lt+1);     // 1로만 구성된 연속부분수열의 최대 길이
         }
 
         return answer;
@@ -22,11 +29,9 @@ public class Main {
     public static void main(String[] args) {
         Main T = new Main();
         Scanner kb = new Scanner(System.in);
-        int n = kb.nextInt();   // 수열의 길이
-        int k = kb.nextInt();   // 0을 1로 변경할 수 있는 최대 횟수
-        int[] arr = new int[n]; // 수열
-        for (int i=0; i<n; i++) arr[i] = kb.nextInt();
+        int n = kb.nextInt();   // 학생 수
+        String str = kb.next();
         kb.close();
-        System.out.println(T.solution(n, k, arr));
+        System.out.println(T.solution(n, str));
     }
 }
